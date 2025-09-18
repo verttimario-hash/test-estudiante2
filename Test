@@ -1,0 +1,417 @@
+index.html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué tipo de estudiante sos? - Online Academy</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+            background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .question {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            backdrop-filter: blur(5px);
+        }
+        
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            line-height: 1.4;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 16px 20px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            line-height: 1.4;
+            text-align: left;
+        }
+        
+        .option:hover {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background-color: #2196f3;
+            color: white;
+            border-color: #1976d2;
+            font-weight: bold;
+        }
+        
+        #resultButton {
+            display: block;
+            width: 240px;
+            margin: 35px auto;
+            padding: 16px 25px;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        #resultButton:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+        
+        #resultButton:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        #result {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-top: 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #resultTitle {
+            font-size: 2.4rem;
+            margin-bottom: 25px;
+            color: #2c3e50;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        
+        .percentage-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .percentage-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        
+        .percentage-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.3rem;
+        }
+        
+        .percentage {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        #resultDescription {
+            font-size: 1.3rem;
+            line-height: 1.7;
+            margin: 25px 0;
+            color: #333;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .progress {
+            text-align: center;
+            margin: 25px 0;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://onlineacademy77.wordpress.com/wp-content/uploads/2025/09/imagen-de-whatsapp-2025-08-22-a-las-07.33.29_54979c69-1.jpg" alt="Online Academy Logo" class="logo">
+        <h1>¿Qué tipo de estudiante sos?</h1>
+    </div>
+    
+    <div class="progress" id="progressText">Preguntas respondidas: 0 de 10</div>
+    
+    <div id="questionsContainer">
+        <!-- Las preguntas se generarán con JavaScript -->
+    </div>
+    
+    <button id="resultButton" disabled>Ver resultado</button>
+    
+    <div id="result">
+        <h2 id="resultTitle"></h2>
+        <div class="percentage-container">
+            <div class="percentage-box">
+                <h3>Metódico</h3>
+                <div id="metodicoPct" class="percentage">0%</div>
+            </div>
+            <div class="percentage-box">
+                <h3>Reflexivo</h3>
+                <div id="reflexivoPct" class="percentage">0%</div>
+            </div>
+            <div class="percentage-box">
+                <h3>Práctico</h3>
+                <div id="practicoPct" class="percentage">0%</div>
+            </div>
+        </div>
+        <p id="resultDescription"></p>
+    </div>
+
+    <script>
+        // Preguntas y respuestas actualizadas según tu solicitud
+        const questions = [
+            {
+                text: "Cuando tenés que estudiar para un examen, ¿cómo organizás tu tiempo?",
+                options: [
+                    { type: "Metódico", text: "Hago un plan de estudio con horarios definidos y sigo una rutina." },
+                    { type: "Reflexivo", text: "Primero analizo qué temas son más importantes y después decido cuánto tiempo dedicarles." },
+                    { type: "Práctico", text: "Repaso lo que creo más útil y voy resolviendo ejercicios directamente." }
+                ]
+            },
+            {
+                text: "¿Cómo preferís aprender un nuevo concepto difícil?",
+                options: [
+                    { type: "Metódico", text: "Lo estudio paso a paso, siguiendo el material y tomando apuntes." },
+                    { type: "Reflexivo", text: "Pienso en ejemplos o comparaciones que me ayuden a comprenderlo." },
+                    { type: "Práctico", text: "Prefiero aplicarlo en un ejercicio o situación concreta." }
+                ]
+            },
+            {
+                text: "Cuando te enfrentás a un trabajo práctico, ¿cuál es tu primer paso?",
+                options: [
+                    { type: "Metódico", text: "Organizo las tareas y hago un esquema de cómo avanzar." },
+                    { type: "Reflexivo", text: "Me detengo a pensar cuál es la mejor forma de encarar el trabajo." },
+                    { type: "Práctico", text: "Comienzo a hacerlo directamente y voy corrigiendo sobre la marcha." }
+                ]
+            },
+            {
+                text: "¿Cómo manejás los plazos de entrega de trabajos?",
+                options: [
+                    { type: "Metódico", text: "Empiezo con anticipación para terminar antes de la fecha límite." },
+                    { type: "Reflexivo", text: "Analizo cuánto tiempo me llevará y lo distribuyo según mi ritmo." },
+                    { type: "Práctico", text: "Trabajo más cerca de la fecha de entrega y me concentro en cumplir." }
+                ]
+            },
+            {
+                text: "Cuando no entendés algo en clase, ¿qué hacés?",
+                options: [
+                    { type: "Metódico", text: "Vuelvo a leer el material y lo estudio con más detalle." },
+                    { type: "Reflexivo", text: "Pienso en diferentes formas de entenderlo o lo relaciono con lo que ya sé." },
+                    { type: "Práctico", text: "Pregunto al profesor o a un compañero en el momento." }
+                ]
+            },
+            {
+                text: "¿Cómo te preparás para una presentación oral?",
+                options: [
+                    { type: "Metódico", text: "Escribo un guion y lo practico varias veces." },
+                    { type: "Reflexivo", text: "Pienso en las ideas principales y cómo transmitirlas de forma clara." },
+                    { type: "Práctico", text: "Hago una práctica rápida y confío en explicarlo con naturalidad." }
+                ]
+            },
+            {
+                text: "¿Qué tipo de actividades te resultan más efectivas para aprender?",
+                options: [
+                    { type: "Metódico", text: "Leer, resumir y hacer esquemas." },
+                    { type: "Reflexivo", text: "Debates, análisis de casos y reflexionar sobre ejemplos." },
+                    { type: "Práctico", text: "Ejercicios, experimentos y actividades aplicadas." }
+                ]
+            },
+            {
+                text: "Cuando tenés que resolver un problema complejo, ¿cuál es tu enfoque?",
+                options: [
+                    { type: "Metódico", text: "Lo divido en partes y avanzo paso a paso." },
+                    { type: "Reflexivo", text: "Analizo todas las posibles soluciones antes de decidir." },
+                    { type: "Práctico", text: "Pruebo diferentes opciones hasta encontrar la que funciona." }
+                ]
+            },
+            {
+                text: "¿Cómo organizás tu espacio de estudio?",
+                options: [
+                    { type: "Metódico", text: "Ordenado, con todo el material preparado y a mano." },
+                    { type: "Reflexivo", text: "Prefiero un lugar tranquilo donde pueda concentrarme y pensar." },
+                    { type: "Práctico", text: "Cualquier lugar sirve mientras pueda empezar a trabajar." }
+                ]
+            },
+            {
+                text: "Cuando aprendés algo nuevo, ¿qué te motiva más?",
+                options: [
+                    { type: "Metódico", text: "Ver mi progreso y sentir que sigo un plan claro." },
+                    { type: "Reflexivo", text: "Entender el porqué de las cosas y relacionarlas con otros temas." },
+                    { type: "Práctico", text: "Poder aplicarlo de inmediato en la práctica o en la vida real." }
+                ]
+            }
+        ];
+
+        const studentTypes = {
+            "Metódico": "organizado, sigue rutinas y planifica su aprendizaje.",
+            "Reflexivo": "estudia a su ritmo, analiza y profundiza los conceptos.",
+            "Práctico": "aprende haciendo, experimentando y colaborando con otros."
+        };
+
+        let scores = {
+            "Metódico": 0,
+            "Reflexivo": 0,
+            "Práctico": 0
+        };
+
+        let answeredCount = 0;
+
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                let optionsHtml = '';
+                
+                q.options.forEach(opt => {
+                    optionsHtml += `
+                        <div class="option" data-type="${opt.type}" data-question="${index}">
+                            <strong>${opt.type}:</strong> ${opt.text}
+                        </div>
+                    `;
+                });
+                
+                questionDiv.innerHTML = `
+                    <div class="question-title">Pregunta ${index + 1}: ${q.text}</div>
+                    <div class="options">
+                        ${optionsHtml}
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const questionIndex = this.getAttribute('data-question');
+                    document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    const type = this.getAttribute('data-type');
+                    scores[type]++;
+                    
+                    if (!this.hasAttribute('data-answered')) {
+                        this.setAttribute('data-answered', 'true');
+                        answeredCount++;
+                        document.getElementById('progressText').textContent = `Preguntas respondidas: ${answeredCount} de 10`;
+                    }
+                    
+                    if (answeredCount === 10) {
+                        document.getElementById('resultButton').disabled = false;
+                    }
+                });
+            });
+        }
+
+        function showResult() {
+            // Calcular porcentajes
+            const total = 10;
+            const metodicoPct = Math.round((scores["Metódico"] / total) * 100);
+            const reflexivoPct = Math.round((scores["Reflexivo"] / total) * 100);
+            const practicoPct = Math.round((scores["Práctico"] / total) * 100);
+            
+            // Encontrar el tipo predominante
+            let maxType = "Metódico";
+            let maxScore = scores["Metódico"];
+            
+            for (const type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    maxType = type;
+                }
+            }
+            
+            // En caso de empate, prioridad: Metódico > Reflexivo > Práctico
+            for (const type of ["Metódico", "Reflexivo", "Práctico"]) {
+                if (scores[type] === maxScore) {
+                    maxType = type;
+                    break;
+                }
+            }
+            
+            // Mostrar porcentajes
+            document.getElementById('metodicoPct').textContent = `${metodicoPct}%`;
+            document.getElementById('reflexivoPct').textContent = `${reflexivoPct}%`;
+            document.getElementById('practicoPct').textContent = `${practicoPct}%`;
+            
+            // Mostrar título y descripción
+            document.getElementById('resultTitle').textContent = `¡Tu perfil de estudiante predominante es: ${maxType}!`;
+            document.getElementById('resultDescription').textContent = `Características: ${studentTypes[maxType]}\n\nEste resultado se basa en tus respuestas. ¡Recordá que todos usamos un poco de cada estilo en diferentes situaciones!`;
+            
+            // Mostrar resultado con animación
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            document.getElementById('resultButton').addEventListener('click', showResult);
+        });
+    </script>
+</body>
+</html>
