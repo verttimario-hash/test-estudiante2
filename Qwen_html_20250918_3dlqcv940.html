@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué tipo de estudiante sos?</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+        
+        .question {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .question-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .option {
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option:hover {
+            background-color: #e3f2fd;
+            border-color: #2196f3;
+        }
+        
+        .option.selected {
+            background-color: #2196f3;
+            color: white;
+            border-color: #2196f3;
+        }
+        
+        #resultButton {
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        #resultButton:hover {
+            background-color: #45a049;
+        }
+        
+        #result {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+        
+        #resultTitle {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        
+        #resultDescription {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .progress {
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>¿Qué tipo de estudiante sos?</h1>
+    
+    <div class="progress" id="progressText">Preguntas respondidas: 0 de 10</div>
+    
+    <div id="questionsContainer">
+        <!-- Las preguntas se generarán con JavaScript -->
+    </div>
+    
+    <button id="resultButton" disabled>Ver resultado</button>
+    
+    <div id="result">
+        <h2 id="resultTitle"></h2>
+        <p id="resultDescription"></p>
+    </div>
+
+    <script>
+        // Definimos las preguntas
+        const questions = [
+            "Cuando tenés que estudiar para un examen, ¿cómo organizás tu tiempo?",
+            "¿Cómo preferís aprender un nuevo concepto difícil?",
+            "Cuando te enfrentás a un trabajo práctico, ¿cuál es tu primer paso?",
+            "¿Cómo manejás los plazos de entrega de trabajos?",
+            "Cuando no entendés algo en clase, ¿qué hacés?",
+            "¿Cómo te preparás para una presentación oral?",
+            "¿Qué tipo de actividades te resultan más efectivas para aprender?",
+            "Cuando tenés que resolver un problema complejo, ¿cuál es tu enfoque?",
+            "¿Cómo organizás tu espacio de estudio?",
+            "Cuando aprendés algo nuevo, ¿qué te motiva más?"
+        ];
+
+        // Tipos de estudiante y sus descripciones
+        const studentTypes = {
+            "Metódico": "organizado, sigue rutinas y planifica su aprendizaje.",
+            "Reflexivo": "estudia a su ritmo, analiza y profundiza los conceptos.",
+            "Práctico": "aprende haciendo, experimentando y colaborando con otros."
+        };
+
+        // Inicializamos los puntajes
+        let scores = {
+            "Metódico": 0,
+            "Reflexivo": 0,
+            "Práctico": 0
+        };
+
+        // Contador de preguntas respondidas
+        let answeredCount = 0;
+
+        // Función para generar las preguntas
+        function generateQuestions() {
+            const container = document.getElementById('questionsContainer');
+            
+            questions.forEach((question, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <div class="question-title">Pregunta ${index + 1}: ${question}</div>
+                    <div class="options">
+                        <div class="option" data-type="Metódico" data-question="${index}">Metódico</div>
+                        <div class="option" data-type="Reflexivo" data-question="${index}">Reflexivo</div>
+                        <div class="option" data-type="Práctico" data-question="${index}">Práctico</div>
+                    </div>
+                `;
+                container.appendChild(questionDiv);
+            });
+
+            // Añadimos event listeners a las opciones
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Quitamos la selección de las otras opciones de la misma pregunta
+                    const questionIndex = this.getAttribute('data-question');
+                    document.querySelectorAll(`.option[data-question="${questionIndex}"]`).forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Seleccionamos esta opción
+                    this.classList.add('selected');
+                    
+                    // Sumamos el punto al tipo correspondiente
+                    const type = this.getAttribute('data-type');
+                    scores[type]++;
+                    
+                    // Actualizamos el contador de preguntas respondidas
+                    if (!this.hasAttribute('data-answered')) {
+                        this.setAttribute('data-answered', 'true');
+                        answeredCount++;
+                        document.getElementById('progressText').textContent = `Preguntas respondidas: ${answeredCount} de 10`;
+                    }
+                    
+                    // Habilitamos el botón si todas las preguntas están respondidas
+                    if (answeredCount === 10) {
+                        document.getElementById('resultButton').disabled = false;
+                    }
+                });
+            });
+        }
+
+        // Función para mostrar el resultado
+        function showResult() {
+            // Encontramos el tipo con mayor puntaje
+            let maxType = "Metódico";
+            let maxScore = scores["Metódico"];
+            
+            for (const type in scores) {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    maxType = type;
+                }
+            }
+            
+            // En caso de empate, elegimos el primero que aparece (Metódico > Reflexivo > Práctico)
+            for (const type of ["Metódico", "Reflexivo", "Práctico"]) {
+                if (scores[type] === maxScore) {
+                    maxType = type;
+                    break;
+                }
+            }
+            
+            // Mostramos el resultado
+            document.getElementById('resultTitle').textContent = `¡Sos un estudiante ${maxType}!`;
+            document.getElementById('resultDescription').textContent = `Características: ${studentTypes[maxType]}`;
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll al resultado
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Inicializamos la página
+        document.addEventListener('DOMContentLoaded', function() {
+            generateQuestions();
+            
+            // Event listener para el botón de resultado
+            document.getElementById('resultButton').addEventListener('click', showResult);
+        });
+    </script>
+</body>
+</html>
